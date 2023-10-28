@@ -1,0 +1,32 @@
+
+<script>
+import { computed } from 'vue';
+export default {
+  name: 'BrushSharp',
+  props: {
+    size: {
+      type: Number,
+      default: 24
+    },
+    color: {
+      type: String,
+      default: 'inherit'
+    }
+  },
+  setup(props) {
+    const fontSize = computed(() => props.size + 'px')
+
+    return {
+      fontSize,
+      color: props.color
+    }
+  }
+}
+</script>
+
+<template>
+  <svg class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" :style="{ fontSize, color }">
+    <path d="M0 0h24v24H0V0z" fill="none"/><path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm14.41-8.66l-2.75-2.75L9 12.25 11.75 15l9.66-9.66z"/>
+  </svg>
+</template>
+        
