@@ -1,0 +1,32 @@
+
+<script>
+import { computed } from 'vue';
+export default {
+  name: 'FormatSizeSharp',
+  props: {
+    size: {
+      type: Number,
+      default: 24
+    },
+    color: {
+      type: String,
+      default: 'inherit'
+    }
+  },
+  setup(props) {
+    const fontSize = computed(() => props.size + 'px')
+
+    return {
+      fontSize,
+      color: props.color
+    }
+  }
+}
+</script>
+
+<template>
+  <svg class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" :style="{ fontSize, color }">
+    <path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/>
+  </svg>
+</template>
+        

@@ -44,7 +44,7 @@ const main = shape => {
               const fontSize = computed(() => props.size + 'px')
 
               return {
-                size: fontSize,
+                fontSize,
                 color: props.color
               }
             }
@@ -52,24 +52,10 @@ const main = shape => {
           </script>
 
           <template>
-            <svg class="fn-icon" ${svgTagContent}>
+            <svg class="fn-icon" ${svgTagContent} :style="{ fontSize, color }">
               ${svgContent}
             </svg>
           </template>
-
-          <style>
-          .fn-icon {
-            user-select: none;
-            width: 1em;
-            height: 1em;
-            display: inline-block;
-            fill: currentcolor;
-            flex-shrink: 0;
-            transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-            font-size: v-bind(size);
-            color: v-bind(color);
-          }
-          </style>
         `.replace(/^          /gm, '');
 
         fs.writeFile(`${targetDir}/${filename}.vue`, template, err => {
