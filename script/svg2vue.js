@@ -100,4 +100,4 @@ const main = shape => {
   });
 };
 
-['filled', 'outlined', 'rounded', 'sharp', 'two-tone'].forEach(shape => main(shape));
+['filled', 'outlined', 'round', 'sharp', 'twotone'].forEach(shape => main(shape));
