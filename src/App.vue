@@ -1,14 +1,25 @@
 <script lang="ts" setup>
-// This import will effect the speed of loading the page
-// import { AbcFilled, HomeFilled } from './components/material-icons';
-import AbcFilled from './components/material-icons/filled/AbcFilled.vue';
-import HomeFilled from './components/material-icons/filled/HomeFilled.vue';
+import { ref } from 'vue';
+// import AppBar from './components/AppBar.vue';
+import Gallery from './components/Gallery.vue';
+import IconFilter from './components/Filter.vue';
+import { Shapes } from './utils';
+
+const shape = ref<Shapes>('Filled');
+const onShapeChange = (newShape: string) => {
+  shape.value = newShape as Shapes;
+};
 </script>
+
 <template>
-  <div style="color: deeppink">
-    <AbcFilled size="50px" />
-  </div>
-  <HomeFilled color="blue" />
+  <!-- <app-bar /> -->
+
+  <main class="main-container">
+    <icon-filter @onShapeChange="onShapeChange" />
+    <keep-alive>
+      <gallery :shape="shape" />
+    </keep-alive>
+  </main>
 </template>
 
 <style>
@@ -22,5 +33,11 @@ body,
 #app {
   width: 100%;
   height: 100%;
+  background-color: #fef7ff;
+}
+
+main.main-container {
+  margin: 50px auto 0;
+  max-width: 1440px;
 }
 </style>
