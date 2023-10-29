@@ -6,7 +6,7 @@ import HomeFilled from './components/material-icons/filled/HomeFilled.vue';
 </script>
 <template>
   <div style="color: deeppink">
-    <AbcFilled :size="60" />
+    <AbcFilled size="50px" />
   </div>
   <HomeFilled color="blue" />
 </template>

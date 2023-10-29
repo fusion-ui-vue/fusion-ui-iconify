@@ -4,12 +4,11 @@
  * This script is used to convert svg files to vue components
  */
 
-const { log } = require('console');
 const fs = require('fs');
 
 const main = shape => {
-  const sourceDir = `../src/material-icons/${shape}`;
-  const targetDir = `../src/components/material-icons/${shape}`;
+  const sourceDir = `src/material-icons/${shape}`;
+  const targetDir = `src/components/material-icons/${shape}`;
 
   fs.readdir(sourceDir, (err, files) => {
     if (err) {
@@ -28,11 +27,12 @@ const main = shape => {
         const template = `
           <script>
           import { computed } from 'vue';
+          import { pxToRem } from '../../../utils';
           export default {
             name: '${filename}',
             props: {
               size: {
-                type: Number,
+                type: [Number, String],
                 default: 24
               },
               color: {
@@ -41,7 +41,15 @@ const main = shape => {
               }
             },
             setup(props) {
-              const fontSize = computed(() => props.size + 'px')
+              const fontSize = computed(() => {
+                const _size = +props.size;
+                if (isNaN(_size)) {
+                  const [_, size, unit] = /(\d+)(\w+)/.exec(props.size) || [];
+                  return unit === 'px' ? pxToRem(+size) : props.size;
+                } else {
+                  return pxToRem(_size);
+                }
+              });
 
               return {
                 fontSize,
@@ -86,4 +94,22 @@ const main = shape => {
   });
 };
 
-['filled', 'outlined', 'round', 'sharp', 'twotone'].forEach(shape => main(shape));
+const shape = ['filled', 'outlined', 'round', 'sharp', 'twotone'];
+// Create folder first
+fs.mkdirSync('src/components/material-icons');
+shape.forEach(shape => fs.mkdirSync(`src/components/material-icons/${shape}`));
+
+// Convert svg to vue component
+shape.forEach(shape => main(shape));
+
+// Then generate index.ts
+fs.writeFile(
+  'src/components/material-icons/index.ts',
+  shape.map(shape => `export * from './${shape}';`).join('\n'),
+  err => {
+    if (err) {
+      return console.error(err);
+    }
+    console.log('Generated index.ts!');
+  }
+);

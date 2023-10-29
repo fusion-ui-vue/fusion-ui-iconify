@@ -1,11 +1,12 @@
 
 <script>
 import { computed } from 'vue';
+import { pxToRem } from '../../../utils';
 export default {
   name: 'SportsMmaRound',
   props: {
     size: {
-      type: Number,
+      type: [Number, String],
       default: 24
     },
     color: {
@@ -14,7 +15,15 @@ export default {
     }
   },
   setup(props) {
-    const fontSize = computed(() => props.size + 'px')
+    const fontSize = computed(() => {
+      const _size = +props.size;
+      if (isNaN(_size)) {
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
+      } else {
+        return pxToRem(_size);
+      }
+    });
 
     return {
       fontSize,
