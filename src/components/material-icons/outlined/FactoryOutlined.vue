@@ -27,6 +27,13 @@ export default {
       }
 
       return css({
+        userSelect: 'none',
+        width: '1em',
+        height: '1em',
+        display: 'inline-block',
+        fill: 'currentcolor',
+        flexShrink: 0,
+        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
         fontSize,
         color: props.color
       });
