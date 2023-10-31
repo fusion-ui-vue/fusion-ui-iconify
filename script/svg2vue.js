@@ -28,6 +28,7 @@ const main = shape => {
           <script>
           import { computed } from 'vue';
           import { pxToRem } from '../../../utils';
+          import { css } from '@emotion/css';
           export default {
             name: '${filename}',
             props: {
