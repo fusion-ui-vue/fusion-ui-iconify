@@ -7,7 +7,7 @@ export default {
   props: {
     size: {
       type: [Number, String],
-      default: 24
+      default: 'inherit'
     },
     color: {
       type: String,
@@ -15,26 +15,31 @@ export default {
     }
   },
   setup(props) {
-    const fontSize = computed(() => {
+    const cssClass = computed(() => {
+      let fontSize;
       const _size = +props.size;
       if (isNaN(_size)) {
         const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        return unit === 'px' ? pxToRem(+size) : props.size;
+        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        return pxToRem(_size);
+        fontSize = pxToRem(_size);
       }
+
+      return css({
+        fontSize,
+        color: props.color
+      });
     });
 
     return {
-      fontSize,
-      color: props.color
-    }
+      cssClass
+    };
   }
 }
 </script>
 
 <template>
-  <svg class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" :style="{ fontSize, color }">
+  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
     <g><rect fill="none" height="24" width="24"/></g><polygon points="22,11 22,3 15,3 15,6 9,6 9,3 2,3 2,11 9,11 9,8 11,8 11,18 15,18 15,21 22,21 22,13 15,13 15,16 13,16 13,8 15,8 15,11"/>
   </svg>
 </template>

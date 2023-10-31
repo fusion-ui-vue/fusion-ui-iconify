@@ -7,7 +7,7 @@ export default {
   props: {
     size: {
       type: [Number, String],
-      default: 24
+      default: 'inherit'
     },
     color: {
       type: String,
@@ -15,26 +15,31 @@ export default {
     }
   },
   setup(props) {
-    const fontSize = computed(() => {
+    const cssClass = computed(() => {
+      let fontSize;
       const _size = +props.size;
       if (isNaN(_size)) {
         const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        return unit === 'px' ? pxToRem(+size) : props.size;
+        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        return pxToRem(_size);
+        fontSize = pxToRem(_size);
       }
+
+      return css({
+        fontSize,
+        color: props.color
+      });
     });
 
     return {
-      fontSize,
-      color: props.color
-    }
+      cssClass
+    };
   }
 }
 </script>
 
 <template>
-  <svg class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" :style="{ fontSize, color }">
+  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
     <rect fill="none" height="24" width="24" y="0"/><path d="M17.34,18H5.8l8.25-12h5.54L17.34,18z M13,4L2,20h17l3-16H13z M14.5,9c-1.38,0-2.5,1.12-2.5,2.5s1.12,2.5,2.5,2.5 s2.5-1.12,2.5-2.5S15.88,9,14.5,9z"/>
   </svg>
 </template>

@@ -7,7 +7,7 @@ export default {
   props: {
     size: {
       type: [Number, String],
-      default: 24
+      default: 'inherit'
     },
     color: {
       type: String,
@@ -15,26 +15,31 @@ export default {
     }
   },
   setup(props) {
-    const fontSize = computed(() => {
+    const cssClass = computed(() => {
+      let fontSize;
       const _size = +props.size;
       if (isNaN(_size)) {
         const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        return unit === 'px' ? pxToRem(+size) : props.size;
+        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        return pxToRem(_size);
+        fontSize = pxToRem(_size);
       }
+
+      return css({
+        fontSize,
+        color: props.color
+      });
     });
 
     return {
-      fontSize,
-      color: props.color
-    }
+      cssClass
+    };
   }
 }
 </script>
 
 <template>
-  <svg class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" :style="{ fontSize, color }">
+  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
     <path d="M0 0h24v24H0V0z" fill="none"/><path d="m18.49 9.89.26-2.79-2.74-.62-1.43-2.41L12 5.18 9.42 4.07 7.99 6.48l-2.74.62.26 2.78L3.66 12l1.85 2.11-.26 2.8 2.74.62 1.43 2.41L12 18.82l2.58 1.11 1.43-2.41 2.74-.62-.26-2.79L20.34 12l-1.85-2.11zM13 17h-2v-2h2v2zm0-4h-2V7h2v6z" opacity=".3"/><path d="m20.9 5.54-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68L23 12l-2.44-2.78.34-3.68zM18.75 16.9l-2.74.62-1.43 2.41L12 18.82l-2.58 1.11-1.43-2.41-2.74-.62.26-2.8L3.66 12l1.85-2.12-.26-2.78 2.74-.61 1.43-2.41L12 5.18l2.58-1.11 1.43 2.41 2.74.62-.26 2.79L20.34 12l-1.85 2.11.26 2.79zM11 15h2v2h-2zm0-8h2v6h-2z"/>
   </svg>
 </template>

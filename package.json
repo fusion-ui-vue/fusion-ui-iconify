@@ -19,6 +19,7 @@
     "Vue3 Icon组件"
   ],
   "dependencies": {
+    "@emotion/css": "^11.11.2",
     "@material/web": "^1.0.1",
     "@types/node": "^18.13.0",
     "less-loader": "5.0.0",

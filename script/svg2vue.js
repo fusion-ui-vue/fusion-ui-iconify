@@ -33,7 +33,7 @@ const main = shape => {
             props: {
               size: {
                 type: [Number, String],
-                default: 24
+                default: 'inherit'
               },
               color: {
                 type: String,
@@ -41,26 +41,31 @@ const main = shape => {
               }
             },
             setup(props) {
-              const fontSize = computed(() => {
+              const cssClass = computed(() => {
+                let fontSize;
                 const _size = +props.size;
                 if (isNaN(_size)) {
-                  const [_, size, unit] = /(\d+)(\w+)/.exec(props.size) || [];
-                  return unit === 'px' ? pxToRem(+size) : props.size;
+                  const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
+                  fontSize = unit === 'px' ? pxToRem(+size) : props.size;
                 } else {
-                  return pxToRem(_size);
+                  fontSize = pxToRem(_size);
                 }
+
+                return css({
+                  fontSize,
+                  color: props.color
+                });
               });
 
               return {
-                fontSize,
-                color: props.color
-              }
+                cssClass
+              };
             }
           }
           </script>
 
           <template>
-            <svg class="fn-icon" ${svgTagContent} :style="{ fontSize, color }">
+            <svg :class="cssClass" class="fn-icon" ${svgTagContent}>
               ${svgContent}
             </svg>
           </template>
