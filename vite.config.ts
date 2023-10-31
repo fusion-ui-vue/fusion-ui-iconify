@@ -16,7 +16,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     lib: {
-      entry: path.resolve(__dirname, './src/components/Icon/index.ts'),
+      entry: path.resolve(__dirname, './src/components/material-icons/index.ts'),
       name: 'dist',
       fileName: 'dist'
     },

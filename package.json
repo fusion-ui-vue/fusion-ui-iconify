@@ -1,6 +1,6 @@
 {
   "name": "fusion-ui-iconify",
-  "version": "1.0.35",
+  "version": "1.0.37",
   "author": "lqh",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
   ],
   "main": "dist/dist.umd.js",
   "module": "dist/dist.mjs",
-  "types": "dist/components/Icon/index.d.ts",
+  "types": "dist/components/material-icons/index.d.ts",
   "keywords": [
     "Icon",
     "Iconify",
