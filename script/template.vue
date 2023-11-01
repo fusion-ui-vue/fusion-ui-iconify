@@ -25,15 +25,20 @@ export default {
     });
 
     return {
-      fontSize,
-      color: props.color
+      fontSize
     };
   }
 };
 </script>
 
 <template>
-  <svg class="fn-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24" :style="{ fontSize, color }">
+  <svg
+    class="fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+    focusable="false"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+  >
     <!-- content -->
   </svg>
 </template>
