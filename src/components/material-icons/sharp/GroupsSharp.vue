@@ -1,53 +1,35 @@
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
-import { pxToRem } from '../../../utils';
-import { css } from '@emotion/css';
+import { pxToRem, svgIconProps } from '../../../utils';
+import '../../../style/index.css';
 export default {
   name: 'GroupsSharp',
-  props: {
-    size: {
-      type: [Number, String],
-      default: 'inherit'
-    },
-    color: {
-      type: String,
-      default: 'inherit'
-    }
-  },
+  props: svgIconProps,
   setup(props) {
-    const cssClass = computed(() => {
-      let fontSize;
+    const fontSize = computed(() => {
       const _size = +props.size;
       if (isNaN(_size)) {
-        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        fontSize = pxToRem(_size);
+        return pxToRem(_size);
       }
-
-      return css({
-        userSelect: 'none',
-        width: '1em',
-        height: '1em',
-        display: 'inline-block',
-        fill: 'currentcolor',
-        flexShrink: 0,
-        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-        fontSize,
-        color: props.color
-      });
     });
 
     return {
-      cssClass
+      fontSize,
+      color: props.color
     };
   }
 }
 </script>
 
 <template>
-  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+  <svg class="fn-icon-material fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+     xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"
+  >
     <rect fill="none" height="24" width="24"/><g><path d="M12,12.75c1.63,0,3.07,0.39,4.24,0.9c1.08,0.48,1.76,1.56,1.76,2.73L18,18H6l0-1.61c0-1.18,0.68-2.26,1.76-2.73 C8.93,13.14,10.37,12.75,12,12.75z M4,13c1.1,0,2-0.9,2-2c0-1.1-0.9-2-2-2s-2,0.9-2,2C2,12.1,2.9,13,4,13z M5.13,14.1 C4.76,14.04,4.39,14,4,14c-0.99,0-1.93,0.21-2.78,0.58C0.48,14.9,0,15.62,0,16.43V18l4.5,0v-1.61C4.5,15.56,4.73,14.78,5.13,14.1z M20,13c1.1,0,2-0.9,2-2c0-1.1-0.9-2-2-2s-2,0.9-2,2C18,12.1,18.9,13,20,13z M24,16.43c0-0.81-0.48-1.53-1.22-1.85 C21.93,14.21,20.99,14,20,14c-0.39,0-0.76,0.04-1.13,0.1c0.4,0.68,0.63,1.46,0.63,2.29V18l4.5,0V16.43z M12,6c1.66,0,3,1.34,3,3 c0,1.66-1.34,3-3,3s-3-1.34-3-3C9,7.34,10.34,6,12,6z"/></g>
   </svg>
 </template>

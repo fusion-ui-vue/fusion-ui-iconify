@@ -1,53 +1,35 @@
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
-import { pxToRem } from '../../../utils';
-import { css } from '@emotion/css';
+import { pxToRem, svgIconProps } from '../../../utils';
+import '../../../style/index.css';
 export default {
   name: 'PhotoSizeSelectLargeTwotone',
-  props: {
-    size: {
-      type: [Number, String],
-      default: 'inherit'
-    },
-    color: {
-      type: String,
-      default: 'inherit'
-    }
-  },
+  props: svgIconProps,
   setup(props) {
-    const cssClass = computed(() => {
-      let fontSize;
+    const fontSize = computed(() => {
       const _size = +props.size;
       if (isNaN(_size)) {
-        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        fontSize = pxToRem(_size);
+        return pxToRem(_size);
       }
-
-      return css({
-        userSelect: 'none',
-        width: '1em',
-        height: '1em',
-        display: 'inline-block',
-        fill: 'currentcolor',
-        flexShrink: 0,
-        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-        fontSize,
-        color: props.color
-      });
     });
 
     return {
-      cssClass
+      fontSize,
+      color: props.color
     };
   }
 }
 </script>
 
 <template>
-  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+  <svg class="fn-icon-material fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+     xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+  >
     <path d="M0 0h24v24H0V0z" fill="none"/><path d="M17 19h2v2h-2zM1 19c0 1.1.9 2 2 2h12V11H1v8zm4.5-3.21l1.79 2.15 2.5-3.22L13 19H3l2.5-3.21zM17 3h2v2h-2zm4 8h2v2h-2zm0 4h2v2h-2zM3 3C2 3 1 4 1 5h2V3zm18 4h2v2h-2zm-8-4h2v2h-2zm8 18c1 0 2-1 2-2h-2v2zM1 7h2v2H1zm8-4h2v2H9zM5 3h2v2H5zm16 0v2h2c0-1-1-2-2-2z"/>
   </svg>
 </template>

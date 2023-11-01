@@ -1,53 +1,35 @@
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
-import { pxToRem } from '../../../utils';
-import { css } from '@emotion/css';
+import { pxToRem, svgIconProps } from '../../../utils';
+import '../../../style/index.css';
 export default {
   name: 'NotListedLocationOutlined',
-  props: {
-    size: {
-      type: [Number, String],
-      default: 'inherit'
-    },
-    color: {
-      type: String,
-      default: 'inherit'
-    }
-  },
+  props: svgIconProps,
   setup(props) {
-    const cssClass = computed(() => {
-      let fontSize;
+    const fontSize = computed(() => {
       const _size = +props.size;
       if (isNaN(_size)) {
-        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        fontSize = pxToRem(_size);
+        return pxToRem(_size);
       }
-
-      return css({
-        userSelect: 'none',
-        width: '1em',
-        height: '1em',
-        display: 'inline-block',
-        fill: 'currentcolor',
-        flexShrink: 0,
-        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-        fontSize,
-        color: props.color
-      });
     });
 
     return {
-      cssClass
+      fontSize,
+      color: props.color
     };
   }
 }
 </script>
 
 <template>
-  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+  <svg class="fn-icon-material fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+     xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"
+  >
     <path d="M0 0h24v24H0V0z" fill="none"/><path d="M12.01 16c-.27 0-.52-.1-.71-.29-.2-.2-.29-.43-.29-.71-.01-.55.43-.99.98-1h.02c.28 0 .51.1.71.29.18.19.28.43.28.7s-.1.51-.29.71-.43.3-.7.3zm-.88-3.66c0-.45.1-.84.29-1.16.19-.33.53-.7 1-1.12.28-.25.48-.47.61-.66s.19-.4.19-.64c0-.29-.11-.53-.32-.74-.21-.2-.5-.3-.85-.3-.37 0-.74.1-.96.3-.21.2-.4.45-.4.98H9c0-1.01.46-1.73.97-2.21C10.53 6.28 11.25 6 12 6c.59 0 1.11.12 1.57.35s.79.55 1.05.96.38.86.38 1.35-.1.9-.31 1.25-.48.71-.89 1.09c-.32.3-.53.56-.65.77s-.18.49-.18.81V13h-1.85v-.66h.01zM18 10.2C18 6.57 15.35 4 12 4s-6 2.57-6 6.2c0 2.34 1.95 5.44 6 9.14 4.05-3.7 6-6.8 6-9.14zM12 2c4.2 0 8 3.22 8 8.2 0 3.32-2.67 7.25-8 11.8-5.33-4.55-8-8.48-8-11.8C4 5.22 7.8 2 12 2z"/>
   </svg>
 </template>

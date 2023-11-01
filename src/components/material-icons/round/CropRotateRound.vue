@@ -1,53 +1,35 @@
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
-import { pxToRem } from '../../../utils';
-import { css } from '@emotion/css';
+import { pxToRem, svgIconProps } from '../../../utils';
+import '../../../style/index.css';
 export default {
   name: 'CropRotateRound',
-  props: {
-    size: {
-      type: [Number, String],
-      default: 'inherit'
-    },
-    color: {
-      type: String,
-      default: 'inherit'
-    }
-  },
+  props: svgIconProps,
   setup(props) {
-    const cssClass = computed(() => {
-      let fontSize;
+    const fontSize = computed(() => {
       const _size = +props.size;
       if (isNaN(_size)) {
-        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        fontSize = pxToRem(_size);
+        return pxToRem(_size);
       }
-
-      return css({
-        userSelect: 'none',
-        width: '1em',
-        height: '1em',
-        display: 'inline-block',
-        fill: 'currentcolor',
-        flexShrink: 0,
-        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-        fontSize,
-        color: props.color
-      });
     });
 
     return {
-      cssClass
+      fontSize,
+      color: props.color
     };
   }
 }
 </script>
 
 <template>
-  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+  <svg class="fn-icon-material fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+     xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+  >
     <path d="M0 0h24v24H0V0z" fill="none"/><path d="M16 9v5h2V8c0-1.1-.9-2-2-2h-6v2h5c.55 0 1 .45 1 1zm3 7H9c-.55 0-1-.45-1-1V5c0-.55-.45-1-1-1s-1 .45-1 1v1H5c-.55 0-1 .45-1 1s.45 1 1 1h1v8c0 1.1.9 2 2 2h8v1c0 .55.45 1 1 1s1-.45 1-1v-1h1c.55 0 1-.45 1-1s-.45-1-1-1zM17.66 1.4C15.99.51 13.83-.11 11.39.04l3.81 3.81 1.33-1.33c3.09 1.46 5.34 4.37 5.89 7.86.06.41.44.69.86.62.41-.06.69-.45.62-.86-.6-3.8-2.96-7-6.24-8.74zM7.47 21.49c-3.09-1.46-5.34-4.37-5.89-7.86-.06-.41-.44-.69-.86-.62-.41.06-.69.45-.62.86.6 3.81 2.96 7.01 6.24 8.75 1.67.89 3.83 1.51 6.27 1.36L8.8 20.16l-1.33 1.33z"/>
   </svg>
 </template>

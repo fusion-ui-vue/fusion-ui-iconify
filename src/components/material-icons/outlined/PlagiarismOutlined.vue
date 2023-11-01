@@ -1,53 +1,35 @@
 
-<script>
+<script lang="ts">
 import { computed } from 'vue';
-import { pxToRem } from '../../../utils';
-import { css } from '@emotion/css';
+import { pxToRem, svgIconProps } from '../../../utils';
+import '../../../style/index.css';
 export default {
   name: 'PlagiarismOutlined',
-  props: {
-    size: {
-      type: [Number, String],
-      default: 'inherit'
-    },
-    color: {
-      type: String,
-      default: 'inherit'
-    }
-  },
+  props: svgIconProps,
   setup(props) {
-    const cssClass = computed(() => {
-      let fontSize;
+    const fontSize = computed(() => {
       const _size = +props.size;
       if (isNaN(_size)) {
-        const [_, size, unit] = /(d+)(w+)/.exec(props.size) || [];
-        fontSize = unit === 'px' ? pxToRem(+size) : props.size;
+        const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
+        return unit === 'px' ? pxToRem(+size) : props.size;
       } else {
-        fontSize = pxToRem(_size);
+        return pxToRem(_size);
       }
-
-      return css({
-        userSelect: 'none',
-        width: '1em',
-        height: '1em',
-        display: 'inline-block',
-        fill: 'currentcolor',
-        flexShrink: 0,
-        transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-        fontSize,
-        color: props.color
-      });
     });
 
     return {
-      cssClass
+      fontSize,
+      color: props.color
     };
   }
 }
 </script>
 
 <template>
-  <svg :class="cssClass" class="fn-icon"  xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24">
+  <svg class="fn-icon-material fn-icon"
+    :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
+     xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"
+  >
     <g><rect fill="none" height="24" width="24"/></g><g><g><path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.89,2,1.99,2H18c1.1,0,2-0.9,2-2V8L14,2z M18,20L6,20V4h7v5h5V20z"/><path d="M9.03,11.03c-1.37,1.37-1.37,3.58,0,4.95c1.12,1.12,2.8,1.31,4.13,0.59l1.88,1.88l1.41-1.41l-1.88-1.88 c0.71-1.33,0.53-3.01-0.59-4.13C12.61,9.66,10.39,9.66,9.03,11.03z M12.56,14.56c-0.59,0.59-1.54,0.59-2.12,0 c-0.59-0.59-0.59-1.54,0-2.12c0.59-0.59,1.54-0.59,2.12,0C13.15,13.03,13.15,13.97,12.56,14.56z"/></g></g>
   </svg>
 </template>
