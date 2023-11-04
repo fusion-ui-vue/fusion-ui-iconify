@@ -5,10 +5,14 @@
  */
 
 const fs = require('fs');
+const shape = ['filled', 'outlined', 'round', 'sharp', 'twotone'];
 
-const main = shape => {
-  const sourceDir = `src/material-icons/${shape}`;
-  const targetDir = `src/components/material-icons/${shape}`;
+// Create folder
+fs.mkdirSync('src/material-icons');
+
+const main = async shape => {
+  const sourceDir = `material-icons/${shape}`;
+  const targetDir = `src/material-icons/`;
 
   fs.readdir(sourceDir, (err, files) => {
     if (err) {
@@ -22,50 +26,19 @@ const main = shape => {
           return console.error(err);
         }
         const str = data.toString();
-        const [_, svgTagContent, svgContent] = str.match(/<svg([^>]+)>([\s\S]+)<\/svg>/);
         const filename = file.replace('.svg', '');
         const template = `
-          <script lang="ts">
-          import { computed } from 'vue';
-          import { pxToRem, svgIconProps } from '../../../utils';
-          import '../../../style/index.css';
-          export default {
-            name: '${filename}',
-            props: svgIconProps,
-            setup(props) {
-              const fontSize = computed(() => {
-                const _size = +props.size;
-                if (isNaN(_size)) {
-                  const [_, size, unit] = /(d+)(w+)/.exec(props.size as string) || [];
-                  return unit === 'px' ? pxToRem(+size) : props.size;
-                } else {
-                  return pxToRem(_size);
-                }
-              });
+        import '../style/index.css';
+        import createSvgIcon from '../utils/createSvgIcon';
+        const ${filename} = createSvgIcon('${str}');
+        export default ${filename};
+        `.replace(/^        /gm, '');
 
-              return {
-                fontSize,
-                color: props.color
-              };
-            }
-          }
-          </script>
-
-          <template>
-            <svg class="fn-icon-material fn-icon"
-              :style="{ '--fn-icon-font-size': fontSize, '--fn-icon-color': $props.color }"
-              ${svgTagContent}
-            >
-              ${svgContent}
-            </svg>
-          </template>
-        `.replace(/^          /gm, '');
-
-        fs.writeFile(`${targetDir}/${filename}.vue`, template, err => {
+        fs.writeFile(`${targetDir}/${filename}.ts`, template, err => {
           if (err) {
             return console.error(`failed to convert ${filename}`, err);
           }
-          console.log(`${filename}.vue is generated!`);
+          console.log(`${filename}.ts is generated!`);
         });
       });
     });
@@ -74,37 +47,21 @@ const main = shape => {
       const template = files
         .map(file => {
           const filename = file.replace('.svg', '');
-          return `export { default as ${filename} } from './${filename}.vue';`;
+          return `export { default as ${filename} } from './material-icons/${filename}';`;
         })
         .join('\n');
 
-      fs.writeFile(`${targetDir}/index.ts`, template, err => {
+      fs.appendFile('src/index.ts', template + '\n', err => {
         if (err) {
           return console.error(err);
         }
         console.log('Generated index.ts!');
       });
+      return template;
     };
     genIndex();
   });
 };
 
-const shape = ['filled', 'outlined', 'round', 'sharp', 'twotone'];
-// Create folder first
-fs.mkdirSync('src/components/material-icons');
-shape.forEach(shape => fs.mkdirSync(`src/components/material-icons/${shape}`));
-
 // Convert svg to vue component
 shape.forEach(shape => main(shape));
-
-// Then generate index.ts
-fs.writeFile(
-  'src/components/material-icons/index.ts',
-  shape.map(shape => `export * from './${shape}';`).join('\n'),
-  err => {
-    if (err) {
-      return console.error(err);
-    }
-    console.log('Generated index.ts!');
-  }
-);
